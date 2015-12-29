@@ -77,11 +77,13 @@ module.exports = (function() {
                     async.series([
                         function(callback) {
                             if(_this.options.dropCollections === true) {
-                                // Drop the collection
-                                mongoose.connection.db.dropCollection(Model.collection.name, function(err) {
-                                    callback();
-                                });
-                            }
+                              // Drop the collection
+			      mongoose.connection.once('open', function() {
+                                   mongoose.connection.db.dropCollection(Model.collection.name, function(err) {
+                                       callback();
+                                   });
+                              });
+			    }
                             else {
                                 callback();
                             }
